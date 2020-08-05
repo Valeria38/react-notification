@@ -26,9 +26,14 @@
     "copy-webpack-plugin": "^6.0.2",
     "jest": "^25.2.7",
     "prettier": "^2.0.3",
+    "prop-types": "^15.7.2",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "aphrodite": "^2.4.0",
+    "react": "^16.13.1"
   }
 }
