@@ -21,19 +21,22 @@
   "devDependencies": {
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-typescript": "^7.9.0",
+    "@types/react": "^16.9.44",
     "babel-jest": "^25.2.6",
     "babel-plugin-module-resolver": "^4.0.0",
     "copy-webpack-plugin": "^6.0.2",
     "jest": "^25.2.7",
     "prettier": "^2.0.3",
-    "prop-types": "^15.7.2",
+    "svg-url-loader": "^6.0.0",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
+    "url-loader": "^4.1.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "@types/node": "^14.0.27",
     "aphrodite": "^2.4.0",
-    "react": "^16.13.1"
+    "react-spring": "^8.0.0"
   }
 }

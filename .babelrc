@@ -11,10 +11,15 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
-    ["module-resolver", {
-      "alias": {
-        "utils": "./src/utils"
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "utils": "./src/utils",
+          "components": "./src/components",
+          "images": "./src/images"
+        }
       }
-    }]
+    ]
   ]
 }

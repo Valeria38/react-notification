@@ -6,16 +6,29 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.(ts|tsx)$/,
         use: 'ts-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-url-loader',
+            options: {
+              limit: 10000
+            }
+          }
+        ]
       }
     ]
   },
   resolve: {
-    extensions: ['.js', '.ts'],
+    extensions: ['.js', '.ts', '.tsx'],
     alias: {
-      utils: path.resolve(__dirname, 'src/utils/')
+      utils: path.resolve(__dirname, 'src/utils/'),
+      components: path.resolve(__dirname, 'src/components'),
+      images: path.resolve(__dirname, 'src/images')
     }
   },
   output: {
@@ -34,5 +47,8 @@ module.exports = {
         { from: './README.md', to: path.resolve(__dirname, 'dist') }
       ]
     })
-  ]
+  ],
+  externals: {
+    react: 'react'
+  }
 };
