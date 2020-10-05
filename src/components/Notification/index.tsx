@@ -5,12 +5,13 @@ import { css } from 'aphrodite/no-important';
 
 const cross = require('images/cross.svg');
 
-import { Observer } from 'utils/index';
+import { Observer, getPositionObject } from 'utils/index';
 
-import { useTimeout } from 'utils/hooks/index';
+// import { ProgressBar } from 'components/ProgressBar/index';
+
+import { defaultDelay } from 'constants/index';
+
 import * as styles from './style';
-
-const observer = new Observer();
 
 type SetProps = {
   type: string;
@@ -19,30 +20,21 @@ type SetProps = {
   delay?: number;
   customProps?: object;
   position?: string;
+  index?: number;
 };
+
+const observer = new Observer();
 
 export const set = (props: SetProps) => {
   observer.dispatch(props);
 };
 
-const getPositionObject = (position: string) => {
-  const result: any = {};
-  const positionKeys = position.split('-');
-
-  for (const key of positionKeys) {
-    result[key] = '10px';
-  }
-
-  result.isTouched = true;
-
-  return result;
-};
-
 export const Notification: React.FC = (): JSX.Element => {
-  const [notification, setNotification] = React.useState<any>(false);
+  const [notification, setNotification] = React.useState<any>([false]);
 
-  const [stateDelay, setStateDelay] = React.useState(2000);
   const [translateX, setTranslateX] = React.useState(200);
+
+  // const [notificationsCount, setNotificationsCount] = React.useState(0);
 
   const transitions = Spring.useTransition(notification, null, {
     from: { opacity: 1, transform: `translateX(${translateX}%)` },
@@ -51,31 +43,46 @@ export const Notification: React.FC = (): JSX.Element => {
     config: Spring.config.wobbly
   });
 
-  useTimeout(() => {
-    setNotification(false);
-  }, stateDelay);
+  const defaultPositionStyles = getPositionObject('top-right', 0);
 
-  const defaultPositionStyles = getPositionObject('top-right');
+  const makeVisible = (props: SetProps) => {
+    console.log('make visible');
 
-  const makeVisible = ({ type, message, withCross, delay, customProps, position }: SetProps) => {
-    const positionStyles = getPositionObject(position);
+    run({ ...props });
+  };
+
+  const run = ({ type, message, withCross, delay, customProps, position }: SetProps) => {
+    const positionStyles = position ? getPositionObject(position, 0) : defaultPositionStyles;
 
     position && (positionStyles.left ? setTranslateX(-200) : setTranslateX(200));
 
-    setNotification({
-      type,
-      message,
-      withCross,
-      delay,
-      customProps,
-      positionStyles: position ? positionStyles : defaultPositionStyles
-    });
+    if (withCross === undefined) {
+      withCross = true;
+    }
 
-    delay && setStateDelay(delay);
+    setNotification([
+      {
+        type,
+        message,
+        withCross,
+        delay: delay || defaultDelay,
+        customProps,
+        positionStyles
+      }
+    ]);
+
+    closeAfterDelay(delay || defaultDelay);
+  };
+
+  const closeAfterDelay = (delay: number) => {
+    setTimeout(() => {
+      console.log('timeout close');
+      setNotification([false]);
+    }, delay);
   };
 
   const close = () => {
-    setNotification(false);
+    setNotification([false]);
 
     observer.unsubscribe(makeVisible);
   };
@@ -96,8 +103,8 @@ export const Notification: React.FC = (): JSX.Element => {
           key={key}
           className={css(styles.notification(item.type, item.customProps, item.positionStyles)._)}
         >
-          {item.message}
           <img className={css(styles.cross(item.withCross)._)} src={cross} alt="Cross icon" onClick={close} />
+          {item.message}
         </Spring.animated.div>
       )
     );

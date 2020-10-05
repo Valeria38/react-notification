@@ -6,6 +6,7 @@ export const useTimeout = (
   timeout: number = 0 // delay, ms (default: immediately put into JS Event Queue)
 ): (() => void) => {
   const timeoutIdRef = React.useRef<NodeJS.Timeout>();
+
   const cancel = React.useCallback(() => {
     const timeoutId = timeoutIdRef.current;
     if (timeoutId) {
@@ -20,4 +21,25 @@ export const useTimeout = (
   }, [callback, timeout, cancel]);
 
   return cancel;
+};
+
+export const useInterval = (callback: () => void, delay: number = 0) => {
+  const savedCallback = React.useRef<any>();
+
+  // remember latest callback
+  React.useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // setup the interval
+  React.useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
 };

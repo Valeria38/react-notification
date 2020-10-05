@@ -10,7 +10,7 @@ export const notification = (type: string, extraStyles: object, positionStyles: 
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '70px',
+      flexDirection: 'column',
       padding: '20px 40px',
       background:
         type === 'success'

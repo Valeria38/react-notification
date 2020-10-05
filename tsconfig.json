@@ -12,7 +12,9 @@
       "components/*": ["components/*"],
       "components": ["components"],
       "images/*": ["images/*"],
-      "images": ["images"]
+      "images": ["images"],
+      "constants/*": ["constants/*"],
+      "constants": ["constants"]
     },
     "jsx": "react"
   }
